@@ -1,7 +1,7 @@
 export class Base {
     constructor() {
         const tiles = [];
-        const rowLength = 3;
+        let rowLength = 3;
         const numberRows = 5;
         for (let i = 0; i <= numberRows; i++) {
             tiles.push([]);
