@@ -1,4 +1,7 @@
 import { Base } from "./js/board/Base.js";
 
-const base = new Base();
-base.draw();
+document.addEventListener("DOMContentLoaded", () => {
+    const base = new Base();
+    base.draw();
+})
+
