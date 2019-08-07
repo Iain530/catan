@@ -63,18 +63,29 @@ export class Base {
     draw() {
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas, canvas.height)
-
+        ctx.clearRect(0, 0, canvas, canvas.height);
         const sideLength = 60;
         const xOffset = sideLength * Math.sqrt(3) / 2;
         let x = 325 - xOffset * 2;
+        let y = 50;
+
+        // ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(Math.PI / 2);
+        const [backgroundFillColor, backgroundEdgeColor] = ['#1380c0', '#1380c0'];
+        // X and Y swapped after rotate:
+        // X = Y
+        // Y = -X
+        const backgroundY = y + Math.round(this.tiles.length / 2) * 1.5 * sideLength - 0.5 * sideLength;
+        const backgroundX = -325 - xOffset * 2 * Math.round(this.tiles.length / 2);
+        const backgroundSideLength = 312.5
+        this.drawHexagon(backgroundY, backgroundX, backgroundSideLength, backgroundEdgeColor, backgroundFillColor);
+        ctx.rotate(- Math.PI / 2);
 
         ctx.scale(this.scale, this.scale);
 
-        let y = 50;
         this.tiles.forEach((row, i) => {
             row.forEach((hex, j) => {
-                this.drawHex(hex, x, y, sideLength);
+                this.drawHexTile(hex, x, y, sideLength);
                 x += 2 * xOffset;
             });
             if (i < this.tiles.length - 1) {
@@ -85,21 +96,41 @@ export class Base {
         });
     }
 
-    drawHex(hex, originX, originY, sideLength) {
+    drawHexagon(originX, originY, sideLength, edgeColor, fillColor) {
         const ctx = this.ctx;
-        ctx.lineWidth = 10;
+        ctx.lineWidth = 7;
+        ctx.strokeStyle = edgeColor;
         ctx.beginPath();
         ctx.moveTo(originX, originY);
         const xOffset = sideLength * Math.sqrt(3) / 2;
-        ctx.lineTo(originX + xOffset, originY + 0.5*sideLength);
-        ctx.lineTo(originX + xOffset, originY + 1.5*sideLength);
-        ctx.lineTo(originX, originY + 2*sideLength);
-        ctx.lineTo(originX - xOffset, originY + 1.5*sideLength);
-        ctx.lineTo(originX - xOffset, originY + 0.5*sideLength);
+        ctx.lineTo(originX + xOffset, originY + 0.5 * sideLength);
+        ctx.lineTo(originX + xOffset, originY + 1.5 * sideLength);
+        ctx.lineTo(originX, originY + 2 * sideLength);
+        ctx.lineTo(originX - xOffset, originY + 1.5 * sideLength);
+        ctx.lineTo(originX - xOffset, originY + 0.5 * sideLength);
         ctx.closePath();
         ctx.stroke();
 
-        ctx.fillStyle = {
+        ctx.fillStyle = fillColor;
+        ctx.fill();
+    }
+
+    drawHexTile(hex, originX, originY, sideLength) {
+        const ctx = this.ctx;
+        // ctx.lineWidth = 7;
+        const edgeColor = '#ffe000';
+        // ctx.beginPath();
+        // ctx.moveTo(originX, originY);
+        // const xOffset = sideLength * Math.sqrt(3) / 2;
+        // ctx.lineTo(originX + xOffset, originY + 0.5*sideLength);
+        // ctx.lineTo(originX + xOffset, originY + 1.5*sideLength);
+        // ctx.lineTo(originX, originY + 2*sideLength);
+        // ctx.lineTo(originX - xOffset, originY + 1.5*sideLength);
+        // ctx.lineTo(originX - xOffset, originY + 0.5*sideLength);
+        // ctx.closePath();
+        // ctx.stroke();
+
+        const fillColor = {
             [Resource.Desert]: '#d7caa4',
             [Resource.Sheep]: '#83a31a',
             [Resource.Wheat]: '#e5be4e',
@@ -107,10 +138,11 @@ export class Base {
             [Resource.Brick]: '#ad4d22',
             [Resource.Ore]: '#5b6161',
         }[hex.resource];
-        ctx.fill();
+        
+        this.drawHexagon(originX, originY, sideLength, edgeColor, fillColor);
 
         if (hex.resource !== Resource.Desert) {
-            ctx.fillStyle = 'yellow';
+            ctx.fillStyle = '#ffe000';
             ctx.beginPath();
             ctx.arc(originX, originY + sideLength, sideLength / 4, 0, 2 * Math.PI);
             ctx.closePath();

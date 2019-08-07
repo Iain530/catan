@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
             base.scale = width / canvas.width;
             console.log(base.scale);
             canvas.width = width;
-            canvas.height = document.documentElement.clientHeight;
+            canvas.height = document.documentElement.clientHeight - canvas.offsetTop;
         }
 
         base.draw();
