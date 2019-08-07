@@ -69,7 +69,8 @@ export class Base {
         let x = 325 - xOffset * 2;
         let y = 50;
 
-        // ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.scale(this.scale, this.scale);
+
         ctx.rotate(Math.PI / 2);
         const [backgroundFillColor, backgroundEdgeColor] = ['#1380c0', '#1380c0'];
         // X and Y swapped after rotate:
@@ -81,7 +82,6 @@ export class Base {
         this.drawHexagon(backgroundY, backgroundX, backgroundSideLength, backgroundEdgeColor, backgroundFillColor);
         ctx.rotate(- Math.PI / 2);
 
-        ctx.scale(this.scale, this.scale);
 
         this.tiles.forEach((row, i) => {
             row.forEach((hex, j) => {
