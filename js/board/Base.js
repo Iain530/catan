@@ -3,10 +3,11 @@ import Hex from './Hex.js';
 import Resource from './Resource.js';
 
 export class Base {
-    constructor(scale = 1) {
+    constructor(sixPlayers = false) {
+        this.sixPlayers = sixPlayers;
         const tiles = [];
-        let rowLength = 3;
-        const numberRows = 5;
+        let rowLength =  3;
+        const numberRows = sixPlayers ? 7 : 5;
         for (let i = 0; i < numberRows; i++) {
             tiles.push([]);
 
@@ -22,7 +23,7 @@ export class Base {
         this.tiles = tiles;
         this.canvas = document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
-        this.scale = scale;
+        this.scale = 1;
     }
 
     randomise() {
@@ -34,6 +35,14 @@ export class Base {
             [Resource.Brick]: 3,
             [Resource.Ore]: 3,
         };
+        // const availableResources = {
+        //     [Resource.Desert]: 2,
+        //     [Resource.Sheep]: 6,
+        //     [Resource.Wheat]: 6,
+        //     [Resource.Wood]: 6,
+        //     [Resource.Brick]: 5,
+        //     [Resource.Ore]: 5,
+        // };
         const availableNumbers = {
             2: 1,
             3: 2,
@@ -46,6 +55,14 @@ export class Base {
             11: 2,
             12: 1,
         };
+        if (this.sixPlayers) {
+            Object.keys(availableResources).forEach((resource) => {
+                availableResources[resource] += resource !== Resource.Desert ? 2 : 1;
+            });
+            Object.keys(availableNumbers).forEach((number) => {
+                availableNumbers[number] += 1;
+            });
+        }
         const resourceBag = new RandomBag(availableResources);
         const numberBag = new RandomBag(availableNumbers);
 
@@ -62,11 +79,13 @@ export class Base {
 
     draw() {
         const canvas = document.getElementById('canvas');
+        canvas.height = this.sixPlayers ? 750 * this.scale : 600 * this.scale;
+        const canvasMiddle = this.sixPlayers ? 425 : 325;
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas, canvas.height);
         const sideLength = 60;
         const xOffset = sideLength * Math.sqrt(3) / 2;
-        let x = 325 - xOffset * 2;
+        let x = canvasMiddle - xOffset * 2;
         let y = 50;
 
         ctx.scale(this.scale, this.scale);
@@ -77,8 +96,8 @@ export class Base {
         // X = Y
         // Y = -X
         const backgroundY = y + Math.round(this.tiles.length / 2) * 1.5 * sideLength - 0.5 * sideLength;
-        const backgroundX = -325 - xOffset * 2 * Math.round(this.tiles.length / 2);
-        const backgroundSideLength = 312.5
+        const backgroundX = -canvasMiddle - xOffset * Math.round(this.tiles.length / 2) * 2;
+        const backgroundSideLength = Math.round(this.tiles.length / 2) * 2 * xOffset;
         this.drawHexagon(backgroundY, backgroundX, backgroundSideLength, backgroundEdgeColor, backgroundFillColor);
         ctx.rotate(- Math.PI / 2);
 
@@ -94,6 +113,8 @@ export class Base {
             }
             y += 1.5 * sideLength;
         });
+        console.log(y);
+        // canvas.height = y;
     }
 
     drawHexagon(originX, originY, sideLength, edgeColor, fillColor) {

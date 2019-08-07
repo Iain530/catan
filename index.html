@@ -6,10 +6,19 @@
     <link rel="stylesheet" href="css/main.css">
 
     <script src="index.js" type="module"></script>
+    <title>Catan Board Generator</title>
 </head>
 
 <body>
     <h1>Catan Board Generator</h1>
-    <canvas id="canvas" width="650" height="600"></canvas>
+    <div class="settings">
+        <div>
+            <label for="six-players">5-6 Player Expansion</label>
+            <input type="checkbox" name="six-players" id="six-players">
+        </div>
+        <input type="button" value="Generate" id="generate">
+    </div>
+    <!-- <small>Created by <a href="https://iaindev.me/">Iain</a></small> -->
+    <canvas id="canvas" width="850" height="650"></canvas>
 </body>
 </html>
