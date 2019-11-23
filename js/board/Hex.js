@@ -5,7 +5,7 @@ export default class Hex {
     }
 
     setNumber(num) {
-        this.number = num;
+        this.number = parseInt(num);
     }
 
     setResource(resource) {
