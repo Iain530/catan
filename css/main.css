@@ -39,9 +39,11 @@ input[type="button"] {
     background-color: #9f2f22;
     color: #ffe000;
     border: none;
-    border-radius: .75rem;
     cursor: pointer;
     font-size: 1.125rem;
+    border-radius: .75rem;
+    -webkit-appearance: none;
+    -webkit-border-radius: .75rem;
 }
 
 input[type="checkbox"] {
