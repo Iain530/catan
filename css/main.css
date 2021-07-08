@@ -34,7 +34,7 @@ canvas {
     margin-bottom: 0.75rem;
 }
 
-input[type="button"] {
+input[type=button] {
     padding: .75rem 2rem;
     background-color: #9f2f22;
     color: #ffe000;
@@ -44,9 +44,14 @@ input[type="button"] {
     border-radius: .75rem;
     -webkit-appearance: none;
     -webkit-border-radius: .75rem;
+    transition: .25s;
 }
 
-input[type="checkbox"] {
+input[type=button]:hover {
+    background-color: #8a291e;
+}
+
+input[type=checkbox] {
     cursor: pointer;
     height: 1.5rem;
     width: 1.5rem;
