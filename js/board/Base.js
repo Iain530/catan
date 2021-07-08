@@ -35,14 +35,6 @@ export class Base {
             [Resource.Brick]: 3,
             [Resource.Ore]: 3,
         };
-        // const availableResources = {
-        //     [Resource.Desert]: 2,
-        //     [Resource.Sheep]: 6,
-        //     [Resource.Wheat]: 6,
-        //     [Resource.Wood]: 6,
-        //     [Resource.Brick]: 5,
-        //     [Resource.Ore]: 5,
-        // };
         const availableNumbers = {
             2: 1,
             3: 2,
@@ -67,9 +59,9 @@ export class Base {
         const numberBag = new RandomBag(availableNumbers);
 
         this.forEachTile((hex) => {
-            hex.resource = resourceBag.take();
+            hex.setResource(resourceBag.take());
             if (hex.resource !== Resource.Desert)
-                hex.number = numberBag.take();
+                hex.setNumber(numberBag.take());
         });
     }
 
@@ -113,8 +105,6 @@ export class Base {
             }
             y += 1.5 * sideLength;
         });
-        console.log(y);
-        // canvas.height = y;
     }
 
     drawHexagon(originX, originY, sideLength, edgeColor, fillColor) {
@@ -138,18 +128,7 @@ export class Base {
 
     drawHexTile(hex, originX, originY, sideLength) {
         const ctx = this.ctx;
-        // ctx.lineWidth = 7;
         const edgeColor = '#ffe000';
-        // ctx.beginPath();
-        // ctx.moveTo(originX, originY);
-        // const xOffset = sideLength * Math.sqrt(3) / 2;
-        // ctx.lineTo(originX + xOffset, originY + 0.5*sideLength);
-        // ctx.lineTo(originX + xOffset, originY + 1.5*sideLength);
-        // ctx.lineTo(originX, originY + 2*sideLength);
-        // ctx.lineTo(originX - xOffset, originY + 1.5*sideLength);
-        // ctx.lineTo(originX - xOffset, originY + 0.5*sideLength);
-        // ctx.closePath();
-        // ctx.stroke();
 
         const fillColor = {
             [Resource.Desert]: '#d7caa4',
@@ -174,7 +153,7 @@ export class Base {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        ctx.fillStyle = hex.number == 6 || hex.number == 8 ? 'red' : 'black';
+        ctx.fillStyle = hex.number === 6 || hex.number === 8 ? 'red' : 'black';
         if (hex.resource !== Resource.Desert)
             ctx.fillText(hex.number.toString(), originX, originY + sideLength);
     }

@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('generate').addEventListener('click', () => {
         sixPlayers = sixPlayersCheckbox.checked;
-        if (sixPlayers != base.sixPlayers)
+        if (sixPlayers !== base.sixPlayers)
             base = new Base(sixPlayers);
         base.randomise();
         fitToWindow();
