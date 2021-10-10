@@ -7,8 +7,8 @@ export class Base {
         this.sixPlayers = sixPlayers;
         const tiles = [];
         let rowLength =  3;
-        const numberRows = sixPlayers ? 7 : 5;
-        for (let i = 0; i < numberRows; i++) {
+        this.numberRows = sixPlayers ? 7 : 5;
+        for (let i = 0; i < this.numberRows; i++) {
             tiles.push([]);
 
             for (let j = 0; j < rowLength; j++) {
@@ -16,7 +16,7 @@ export class Base {
                 tiles[i].push(hex);
             }    
 
-            if (i+1 > numberRows / 2) rowLength--;
+            if (i+1 > this.numberRows / 2) rowLength--;
             else rowLength++;
         }
 
@@ -63,10 +63,66 @@ export class Base {
             if (hex.resource !== Resource.Desert)
                 hex.setNumber(numberBag.take());
         });
+
+        if (this.someTile((tile, [i, j]) => {
+            if (tile.isSixOrEight()) {
+                const adjacent = this.adjacentTiles(i, j);
+                return adjacent.some(tile => tile.isSixOrEight());
+            }
+        })) {
+            this.randomise();
+        }
+    }
+
+
+    adjacentTiles(rowIndex, columnIndex) {
+        const adjacentIndexes = [];
+
+        if (rowIndex > 0) {
+
+            if (rowIndex > (this.numberRows / 2)) {
+                adjacentIndexes.push(
+                    [rowIndex-1, columnIndex],
+                    [rowIndex-1, columnIndex+1],
+                );
+            } else {
+                adjacentIndexes.push(
+                    [rowIndex-1, columnIndex-1],
+                    [rowIndex-1, columnIndex],
+                );
+            }
+
+        }
+
+        adjacentIndexes.push(
+            [rowIndex, columnIndex-1],
+            [rowIndex, columnIndex+1],
+        );
+
+        if (rowIndex < this.numberRows-1) {
+
+            if (rowIndex+1 < (this.numberRows / 2)) {
+                adjacentIndexes.push(
+                    [rowIndex+1, columnIndex],
+                    [rowIndex+1, columnIndex+1],
+                );
+            } else {
+                adjacentIndexes.push(
+                    [rowIndex+1, columnIndex-1],
+                    [rowIndex+1, columnIndex],
+                );
+            }
+        }
+
+        return adjacentIndexes.map(([row, col]) => this.tiles[row][col]).filter(tile => tile !== undefined);
     }
 
     forEachTile(action) {
         this.tiles.forEach((row, i) => row.forEach((hex, j) => action(hex, [i, j])));
+    }
+
+    someTile(action) {
+        return this.tiles.some((row, i) => row.some((hex, j) => action(hex, [i, j])));
     }
 
     draw() {

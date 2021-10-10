@@ -11,4 +11,8 @@ export default class Hex {
     setResource(resource) {
         this.resource = resource;
     }
+
+    isSixOrEight() {
+        return this.number === 6 || this.number === 8;
+    }
 }
